@@ -21,13 +21,14 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <maven.compiler.release>17</maven.compiler.release>
         <javafx.version>20</javafx.version>
+        <log4j.version>2.20.0</log4j.version>
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <maven.javadoc.version>3.5.0</maven.javadoc.version>
         <maven.checkstyle.version>3.2.1</maven.checkstyle.version>
         <maven.surefire.version>3.0.0</maven.surefire.version>
         <jacoco.version>0.8.9</jacoco.version>
         <javafx.version>20.0.1</javafx.version>
-        <exec.mainClass>puzzlegame.Main</exec.mainClass>
+        <exec.mainClass>Main</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
@@ -53,6 +54,24 @@
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
