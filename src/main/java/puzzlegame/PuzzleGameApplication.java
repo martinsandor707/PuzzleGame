@@ -12,7 +12,7 @@ public class PuzzleGameApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/game.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/puzzlegame/game.fxml"));
         stage.setTitle("JavaFX Board Game Example");
         Scene scene = new Scene(root);
         stage.setScene(scene);

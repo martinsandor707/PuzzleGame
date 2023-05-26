@@ -44,7 +44,7 @@
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="puzzlegame.PuzzleGameController">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
+    <MenuBar stylesheets="@game.css" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
@@ -83,7 +83,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" stylesheets="game.css" VBox.vgrow="ALWAYS">
          <children>
             <GridPane fx:id="board" layoutY="63.0" prefHeight="147.0" prefWidth="981.0">
               <columnConstraints>

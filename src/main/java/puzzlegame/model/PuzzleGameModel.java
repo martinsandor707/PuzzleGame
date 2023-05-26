@@ -9,6 +9,8 @@ import static java.lang.Math.abs;
  * Contains methods for accessing the individual cells in the GridPane after initialization
  */
 public class PuzzleGameModel {
+
+        //TODO: Change board-size to the GridPane's column count
         public static final int BOARD_SIZE=10;
         public static final int EXTRA_CELL_INTERVAL=2;
 
@@ -72,12 +74,25 @@ public class PuzzleGameModel {
                 }
         }
 
-        private boolean isLegal(int i, int j, int m, int n){
+        /**
+         * Decides whether moving from one cell to another is legal.
+         * @param i Starting row
+         * @param j Starting column
+         * @param m Destination row
+         * @param n Destination column
+         * @return True if the move obeys the rules of the game, false otherwise
+         */
+        public boolean isLegal(int i, int j, int m, int n){
                 return  (i==0 || i==1) && (m==0 || m==1) &&
                         (j>=0 && j<BOARD_SIZE) && (n>=0 && n<BOARD_SIZE) &&
-                        ((abs(i-m)==1 && abs(j-n)==0) || (abs(i-m)==0 && abs(j-n)==1));
+                        ((abs(i-m)==1 && abs(j-n)==0) || (abs(i-m)==0 && abs(j-n)==1)) &&
+                        board[m][n].get().getState()==CellState.VALID;
         }
 
+        /**
+         * @return A String representation of the current board state, where invalid states are denoted by X, empty cells
+         * are 0 and occupied cells are their respective value
+         */
         @Override
         public String toString(){
                 StringBuilder builder=new StringBuilder();
