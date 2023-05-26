@@ -21,7 +21,7 @@ public class PuzzleGameController {
     private GridPane board;
 
     /** I hate having to use this, but accessing any values on the GridPane is extremely bothersome*/
-    private final StackPane[][] gridPaneArray=new StackPane[board.getRowCount()][board.getColumnCount()];
+    private final StackPane[][] gridPaneArray=new StackPane[2][10];
 
     @FXML
     public void initialize(){
@@ -29,12 +29,12 @@ public class PuzzleGameController {
             for (int column=0; column<board.getColumnCount(); column++){
                 StackPane cell;
                 if (model.getCell(row,column).getState()== CellState.INVALID){
-                    cell=new StackPane();
-                    cell.setOpacity(1);             //We just draw an invisible cell to fill up the GridPane
+                    cell=new StackPane(); //We just draw an invisible cell to fill up the GridPane
                 }
                 else{
                     cell=drawValidCell(row,column);
                 }
+                cell.setPrefSize(120,120);
                 board.add(cell, column, row);
                 gridPaneArray[row][column]=cell;
             }
@@ -47,7 +47,8 @@ public class PuzzleGameController {
 
         if(model.getCell(i,j).getValue()>0){
             Circle piece=new Circle(50);
-            piece.getStyleClass().add("piece");
+            piece.setFill(Color.GREEN);
+            piece.setOpacity(1);
 
             Label value=new Label(String.valueOf(model.getCell(i, j).getValue()));
             value.setTextFill(Color.WHITE);
@@ -87,10 +88,10 @@ public class PuzzleGameController {
     @FXML
     public void occupiedCellClicked(MouseEvent event){
         if (selectedCell!=null){    //Reset the opacity of the previously selected cell
-            selectedCell.setOpacity(0.5);
+            selectedCell.setOpacity(1);
         }
         selectedCell=(StackPane)event.getSource();
-        selectedCell.setOpacity(0);
+        selectedCell.setOpacity(1);
 
         selectedRow= board.getRowIndex(selectedCell);
         selectedColumn=board.getColumnIndex(selectedCell);

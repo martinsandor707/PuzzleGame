@@ -1,19 +1,13 @@
 .cell{
     -fx-border-style: solid;
     -fx-background-color: white;
-    -fx-opacity: 0.5
 }
 
 .cell:hover{
-    -fx-background-color: whitesmoke;
+    -fx-background-color: grey;
 }
 
 .possibleCellMove{
     -fx-border-style: solid;
-    -fx-background-color: lightsteelblue
-    -fx-opacity: 0.5
-}
-
-.piece{
-    -fx-background-color: green;
+    -fx-background-color: lightsteelblue;
 }
