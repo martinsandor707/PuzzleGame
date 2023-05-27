@@ -42,7 +42,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" stylesheets="@/puzzlegame/game.css" VBox.vgrow="ALWAYS">
          <children>
-            <GridPane fx:id="board" layoutX="100.0" layoutY="82.0" prefHeight="199.0" prefWidth="1000.0">
+            <GridPane fx:id="board" layoutX="100.0" layoutY="82.0" prefHeight="210.0" prefWidth="1000.0">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="100.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="100.0" prefWidth="100.0" />

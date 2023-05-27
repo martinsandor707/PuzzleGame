@@ -1,13 +1,27 @@
 .cell{
     -fx-border-style: solid;
     -fx-background-color: white;
+    -fx-font-size: 20;
+    -fx-font-family: Comic Sans;
+    -fx-text-fill: white;
+    -fx-alignment: center;
 }
 
 .cell:hover{
+    -fx-background-color: whitesmoke;
+}
+
+.selectedCell{
+    -fx-border-style: solid;
     -fx-background-color: grey;
+    -fx-font-size: 20;
+    -fx-font-family: Comic Sans;
+    -fx-text-fill: white;
+    -fx-alignment: center;
 }
 
 .possibleCellMove{
     -fx-border-style: solid;
     -fx-background-color: lightsteelblue;
+    -fx-opacity: 0.5
 }

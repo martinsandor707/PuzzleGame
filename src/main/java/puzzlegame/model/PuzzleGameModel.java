@@ -61,7 +61,7 @@ public class PuzzleGameModel {
          * @param thisColumn .
          * @param thatRow The parameters of the desired position
          * @param thatColumn .
-         * @throws IllegalMoveException Custom exception for the game's rules
+         * @throws IllegalMoveException if the move doesn't follow the game rules
          */
         public void move(int thisRow, int thisColumn, int thatRow, int thatColumn) throws IllegalMoveException{
                 if (isLegal(thisRow,thisColumn,thatRow,thatColumn) && board[thatRow][thatColumn].get().getValue()==0 &&

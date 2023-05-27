@@ -8,10 +8,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
+
 import puzzlegame.model.CellState;
 import puzzlegame.model.IllegalMoveException;
 import puzzlegame.model.PuzzleGameModel;
 
+import org.tinylog.Logger;
 public class PuzzleGameController {
 
     private final PuzzleGameModel model=new PuzzleGameModel();
@@ -78,8 +80,17 @@ public class PuzzleGameController {
                 StackPane dummyCell=selectedCell;
                 gridPaneArray[selectedRow][selectedColumn]=gridPaneArray[destinationRow][destinationColumn];
                 gridPaneArray[destinationRow][destinationColumn]=dummyCell;
+
+                Logger.debug("The player did a legal move. The current state of the board should be:\n" +model+"\n");
+
+                selectedCell.getStyleClass().remove("selectedCell");
+                selectedCell.getStyleClass().add("cell");
+                selectedCell=null;
+                unhighlightAllCells();
+
             } catch(IllegalMoveException e){
                 //TODO: Insert logging here
+                Logger.info( "The player attempted to do an illegal move: "+e.getMessage()+"\n");
             }
         }
 
@@ -88,10 +99,13 @@ public class PuzzleGameController {
     @FXML
     public void occupiedCellClicked(MouseEvent event){
         if (selectedCell!=null){    //Reset the opacity of the previously selected cell
-            selectedCell.setOpacity(1);
+            selectedCell.getStyleClass().remove("selectedCell");
+            selectedCell.getStyleClass().add("cell");
         }
         selectedCell=(StackPane)event.getSource();
-        selectedCell.setOpacity(1);
+
+        selectedCell.getStyleClass().remove("cell");
+        selectedCell.getStyleClass().add("selectedCell");
 
         selectedRow= board.getRowIndex(selectedCell);
         selectedColumn=board.getColumnIndex(selectedCell);
@@ -104,37 +118,52 @@ public class PuzzleGameController {
 
     /**
      * This method first resets every cell to default style, then checks every neighbour of the selected cell to see
-     * if they are valid and unoccupied. If both of these are true, then the neighbouring cell gets the "possible move" styling
+     * if they are valid and unoccupied. If both of these are true, then the neighbouring cell gets the "possible move" styling<br>
+     *
+     * REASONING: Using many if-else clauses is bad practice, but it should be much faster than traversing the entire GridPane again
+     * just to highlight the cells. I could shorten it by putting it in a try-catch clause instead, but if the selected cell
+     * is on an edge, then execution will stop before highlighting other neighbours which are still on the GridPane.
      */
     private void highlightNeighbouringCells(){
-        for (int row=0; row<gridPaneArray.length; row++){
-            for (int column=0; column<gridPaneArray[row].length; column++){
 
-                if (model.getCell(row,column).getState()==CellState.VALID){
-                    gridPaneArray[row][column].getStyleClass().remove(0);
-                    gridPaneArray[row][column].getStyleClass().add("cell");
-                }
-            }
-        }
+        unhighlightAllCells();
+
         if (selectedRow==0){
-            gridPaneArray[1][selectedColumn].getStyleClass().remove(0);
+            gridPaneArray[1][selectedColumn].getStyleClass().remove("cell");
             gridPaneArray[1][selectedColumn].getStyleClass().add("possibleCellMove");
+            Logger.info("Highlighting bottom neighbour");
         }
         else{
             if (selectedColumn>0 && model.getCell(selectedRow,selectedColumn-1).getValue()==0){
-                gridPaneArray[selectedRow][selectedColumn-1].getStyleClass().remove(0);
+                gridPaneArray[selectedRow][selectedColumn-1].getStyleClass().remove("cell");
                 gridPaneArray[selectedRow][selectedColumn-1].getStyleClass().add("possibleCellMove");
+                Logger.info("Highlighting left neighbour");
             }
             if (selectedColumn<9 && model.getCell(selectedRow,selectedColumn+1).getValue()==0){
-                gridPaneArray[selectedRow][selectedColumn+1].getStyleClass().remove(0);
+                gridPaneArray[selectedRow][selectedColumn+1].getStyleClass().remove("cell");
                 gridPaneArray[selectedRow][selectedColumn+1].getStyleClass().add("possibleCellMove");
+                Logger.info("Highlighting right neighbour");
             }
             if (model.getCell(0,selectedColumn).getState()==CellState.VALID && model.getCell(0,selectedColumn).getValue()==0){
-                gridPaneArray[0][selectedColumn].getStyleClass().remove(0);
+                gridPaneArray[0][selectedColumn].getStyleClass().remove("cell");
                 gridPaneArray[0][selectedColumn].getStyleClass().add("possibleCellMove");
+                Logger.info("Highlighting top neighbour");
             }
         }
 
+    }
+
+    private void unhighlightAllCells(){
+        for (int row=0; row<gridPaneArray.length; row++){
+            for (int column=0; column<gridPaneArray[row].length; column++){
+
+                if (model.getCell(row,column).getState()==CellState.VALID && gridPaneArray[row][column].getStyleClass().contains("possibleCellMove")){
+                    gridPaneArray[row][column].getStyleClass().remove("possibleCellMove");
+                    gridPaneArray[row][column].getStyleClass().add("cell");
+
+                }
+            }
+        }
     }
 
 }
