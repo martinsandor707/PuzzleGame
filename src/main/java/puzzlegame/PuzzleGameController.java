@@ -25,6 +25,11 @@ public class PuzzleGameController {
     /** I hate having to use this, but accessing any values on the GridPane is extremely bothersome*/
     private final StackPane[][] gridPaneArray=new StackPane[2][10];
 
+    /**
+     * In the starting state the GridPane is filled up with StackPanes in accordance with the {@code model}.
+     * All cells are stored, but {@code INVALID} cells don't get drawn.
+     */
+
     @FXML
     public void initialize(){
         for (int row=0; row<board.getRowCount(); row++){
@@ -50,7 +55,6 @@ public class PuzzleGameController {
         if(model.getCell(i,j).getValue()>0){
             Circle piece=new Circle(50);
             piece.setFill(Color.GREEN);
-            piece.setOpacity(1);
 
             Label value=new Label(String.valueOf(model.getCell(i, j).getValue()));
             value.setTextFill(Color.WHITE);
@@ -76,36 +80,39 @@ public class PuzzleGameController {
                 int destinationRow= board.getRowIndex(destinationCell);
                 int destinationColumn=board.getColumnIndex(destinationCell);
 
-                turnCellIntoOccupied(destinationCell);
-                turnCellIntoEmpty(selectedCell);
-
                 model.move(selectedRow,selectedColumn,destinationRow,destinationColumn);
                 Logger.debug("The player did a legal move. The current state of the board should be:\n" +model+"\n");
+
+                turnCellIntoOccupied(destinationCell,model.getCell(destinationRow,destinationColumn).getValue());
+                turnCellIntoEmpty(selectedCell);
 
                 selectedCell.getStyleClass().remove("selectedCell");
                 selectedCell.getStyleClass().add("cell");
                 selectedCell=null;
                 unhighlightAllCells();
 
+                if (model.isEndState()){
+                    //TODO: Actually implement what will happen when the player wins
+                    Logger.info("The player won, hooray!");
+                }
+
+
             } catch(IllegalMoveException e){
-                //TODO: Insert logging here
                 Logger.info( "The player attempted to do an illegal move: "+e.getMessage()+"\n");
             }
         }
 
     }
-    public void turnCellIntoEmpty(StackPane cell){
-        System.out.println(cell.getChildren());
+    private void turnCellIntoEmpty(StackPane cell){
         cell.getChildren().remove(0,2);
-        System.out.println(cell.getChildren());
         cell.setOnMouseClicked(this::emptyCellClicked);
     }
 
-    public void turnCellIntoOccupied(StackPane cell){
+    private void turnCellIntoOccupied(StackPane cell, int number){
         Circle piece=new Circle(50);
         piece.setFill(Color.GREEN);
 
-        Label value=new Label(String.valueOf(model.getCell(selectedRow,selectedColumn).getValue()));
+        Label value=new Label(String.valueOf(number));
 
         value.setTextFill(Color.WHITE);
         value.setAlignment(Pos.CENTER);
@@ -132,18 +139,17 @@ public class PuzzleGameController {
 
         highlightNeighbouringCells();
 
-        //TODO: Insert logging here
         Logger.info("Currently selected cell: {} {}  VALUE: {}",
                 selectedRow, selectedColumn, model.getCell(selectedRow,selectedColumn));
     }
 
     /**
-     * This method first resets every cell to default style, then checks every neighbour of the selected cell to see
-     * if they are valid and unoccupied. If both of these are true, then the neighbouring cell gets the "possible move" styling<br>
+     * This method first resets every {@code Cell} to default style, then checks every neighbour of the selected cell to see
+     * if they are valid and unoccupied. If both of these are true, then the neighbouring cell gets the "{@code possibleCellMove}" styling<br><br>
      *
      * REASONING: Using many if-else clauses is bad practice, but it should be much faster than traversing the entire GridPane again
      * just to highlight the cells. I could shorten it by putting it in a try-catch clause instead, but if the selected cell
-     * is on an edge, then execution will stop before highlighting other neighbours which are still on the GridPane.
+     * is on an edge, then execution will stop before highlighting other neighbours which are still on the {@code GridPane}.
      */
     private void highlightNeighbouringCells(){
 
