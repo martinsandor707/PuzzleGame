@@ -61,6 +61,7 @@ public class PuzzleGameController {
             cell.setOnMouseClicked(this::occupiedCellClicked);
         }
         else{
+
             cell.setOnMouseClicked(this::emptyCellClicked);
         }
 
@@ -75,12 +76,10 @@ public class PuzzleGameController {
                 int destinationRow= board.getRowIndex(destinationCell);
                 int destinationColumn=board.getColumnIndex(destinationCell);
 
+                turnCellIntoOccupied(destinationCell);
+                turnCellIntoEmpty(selectedCell);
+
                 model.move(selectedRow,selectedColumn,destinationRow,destinationColumn);
-
-                StackPane dummyCell=selectedCell;
-                gridPaneArray[selectedRow][selectedColumn]=gridPaneArray[destinationRow][destinationColumn];
-                gridPaneArray[destinationRow][destinationColumn]=dummyCell;
-
                 Logger.debug("The player did a legal move. The current state of the board should be:\n" +model+"\n");
 
                 selectedCell.getStyleClass().remove("selectedCell");
@@ -95,6 +94,27 @@ public class PuzzleGameController {
         }
 
     }
+    public void turnCellIntoEmpty(StackPane cell){
+        System.out.println(cell.getChildren());
+        cell.getChildren().remove(0,2);
+        System.out.println(cell.getChildren());
+        cell.setOnMouseClicked(this::emptyCellClicked);
+    }
+
+    public void turnCellIntoOccupied(StackPane cell){
+        Circle piece=new Circle(50);
+        piece.setFill(Color.GREEN);
+
+        Label value=new Label(String.valueOf(model.getCell(selectedRow,selectedColumn).getValue()));
+
+        value.setTextFill(Color.WHITE);
+        value.setAlignment(Pos.CENTER);
+
+        cell.getChildren().add(piece);
+        cell.getChildren().add(value);
+        cell.setOnMouseClicked(this::occupiedCellClicked);
+    }
+
 
     @FXML
     public void occupiedCellClicked(MouseEvent event){
@@ -113,7 +133,8 @@ public class PuzzleGameController {
         highlightNeighbouringCells();
 
         //TODO: Insert logging here
-
+        Logger.info("Currently selected cell: {} {}  VALUE: {}",
+                selectedRow, selectedColumn, model.getCell(selectedRow,selectedColumn));
     }
 
     /**
