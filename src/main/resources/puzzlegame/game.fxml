@@ -32,11 +32,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="puzzlegame.PuzzleGameController">
   <children>
@@ -60,6 +63,26 @@
                 <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
+            <Label contentDisplay="CENTER" layoutX="3.0" layoutY="347.0" prefHeight="25.0" prefWidth="1200.0" text="Put the pieces in ascending order!" textAlignment="CENTER">
+               <font>
+                  <Font name="Times New Roman" size="22.0" />
+               </font>
+            </Label>
+            <Button layoutX="324.0" layoutY="467.0" mnemonicParsing="false" onAction="#saveCurrentState" prefHeight="59.0" prefWidth="97.0" text="Save" textAlignment="CENTER">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Button>
+            <Button layoutX="542.0" layoutY="467.0" mnemonicParsing="false" onAction="#resetGame" prefHeight="59.0" prefWidth="123.0" text="Reset" textAlignment="CENTER">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Button>
+            <Button layoutX="782.0" layoutY="467.0" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="59.0" prefWidth="97.0" text="Quit" textAlignment="CENTER">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Button>
          </children>
     </AnchorPane>
   </children>

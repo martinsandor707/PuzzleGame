@@ -1,14 +1,22 @@
 package puzzlegame;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
 
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import puzzlegame.model.CellState;
 import puzzlegame.model.IllegalMoveException;
 import puzzlegame.model.PuzzleGameModel;
@@ -17,7 +25,7 @@ import org.tinylog.Logger;
 public class PuzzleGameController {
 
     private final PuzzleGameModel model=new PuzzleGameModel();
-    private StackPane selectedCell=null;
+    private StackPane selectedCell;
     private int selectedRow, selectedColumn;
     @FXML
     private GridPane board;
@@ -32,6 +40,7 @@ public class PuzzleGameController {
 
     @FXML
     public void initialize(){
+        board=new GridPane();
         for (int row=0; row<board.getRowCount(); row++){
             for (int column=0; column<board.getColumnCount(); column++){
                 StackPane cell;
@@ -92,8 +101,8 @@ public class PuzzleGameController {
                 unhighlightAllCells();
 
                 if (model.isEndState()){
-                    //TODO: Actually implement what will happen when the player wins
                     Logger.info("The player won, hooray!");
+                    showVictoryPopUp();
                 }
 
 
@@ -103,6 +112,45 @@ public class PuzzleGameController {
         }
 
     }
+
+    private void showVictoryPopUp() {
+        final Stage victoryPopUp = new Stage();
+        victoryPopUp.initModality(Modality.APPLICATION_MODAL);
+        victoryPopUp.setTitle("Hooray, you won!!");
+
+        Label victoryMessage= new Label("Thank you for trying out my little puzzle game!\n " +
+                "I had to create this project in 4 days instead of working on it for 2 weeks or so like I was supposed to, much to my annoyance\n"+
+                "Despite this, I think it turned out pretty well, I hope my teachers will think so too.");
+        victoryMessage.setAlignment(Pos.CENTER);
+        victoryMessage.setTextAlignment(TextAlignment.CENTER);
+
+        Button playAgain=new Button("Play again!");
+        playAgain.setOnAction(this::resetGame);
+
+        Button quit=new Button("Back to the main menu");
+        quit.setOnAction(this::backToMainMenu);
+
+        VBox Vlayout= new VBox(10);
+        HBox Hlayout= new HBox(10);
+
+        Hlayout.getChildren().addAll(playAgain,quit);
+        Hlayout.setAlignment(Pos.CENTER);
+
+        //elements added
+        Vlayout.getChildren().addAll(victoryMessage,Hlayout);
+
+        Vlayout.setAlignment(Pos.CENTER);
+
+        Scene scene1= new Scene(Vlayout, 600, 450);
+
+        //TODO: Check if I actually need this
+//        victoryPopUp.setOnCloseRequest(e ->{
+//            e.consume();
+//        });
+        victoryPopUp.setScene(scene1);
+        victoryPopUp.show();
+    }
+
     private void turnCellIntoEmpty(StackPane cell){
         cell.getChildren().remove(0,2);
         cell.setOnMouseClicked(this::emptyCellClicked);
@@ -193,4 +241,15 @@ public class PuzzleGameController {
         }
     }
 
+    public void saveCurrentState(ActionEvent actionEvent) {
+        model.saveToXml("LastSave.xml");
+    }
+
+    public void resetGame(ActionEvent actionEvent) {
+        model.loadFromXml("StartingBoard.xml");
+        initialize();
+    }
+
+    public void backToMainMenu(ActionEvent actionEvent) {
+    }
 }
