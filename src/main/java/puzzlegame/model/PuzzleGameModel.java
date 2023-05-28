@@ -1,6 +1,9 @@
 package puzzlegame.model;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import jaxb.JAXBHelper;
+import org.tinylog.Logger;
+
+import java.io.FileOutputStream;
 
 import static java.lang.Math.abs;
 
@@ -13,8 +16,10 @@ public class PuzzleGameModel {
         //TODO: Change board-size to the GridPane's column count
         public static final int BOARD_SIZE=10;
         public static final int EXTRA_CELL_INTERVAL=2;
+        private final Cell[][] board = new Cell[2][BOARD_SIZE];
 
-        private final ReadOnlyObjectWrapper<Cell>[][] board = new ReadOnlyObjectWrapper[2][BOARD_SIZE];
+        /**I only need this for ease of XML conversion */
+        private final BoardWrapper XmlBoard=new BoardWrapper();
 
         /**
          * Initializes the {@link #board}, storing if a given cell is valid or not.<br>
@@ -25,14 +30,34 @@ public class PuzzleGameModel {
         public PuzzleGameModel() {
                 for (int i=0; i<BOARD_SIZE; i++){       //The first row of the board is mostly invalid
                         if (i>EXTRA_CELL_INTERVAL && (i+1)%EXTRA_CELL_INTERVAL==0 && i!=BOARD_SIZE-1)
-                                board[0][i]=new ReadOnlyObjectWrapper<>(new Cell(0)); //except for some free cells at set intervals
-                        else board[0][i]=new ReadOnlyObjectWrapper<>(new Cell());
+                                board[0][i]=new Cell(0); //except for some free cells at set intervals
+                        else board[0][i]=new Cell();
                 }
-                board[1][0]=new ReadOnlyObjectWrapper<>(new Cell(0));       //We need to move the "1" piece here
+                board[1][0]=new Cell(0);       //We need to move the "1" piece here
                 for (int i=1; i<BOARD_SIZE-1; i++){
-                        board[1][i]=new ReadOnlyObjectWrapper<>(new Cell(i+1));
+                        board[1][i]=new Cell(i+1);
                 }
-                board[1][BOARD_SIZE-1]=new ReadOnlyObjectWrapper<>(new Cell(1));    //The "1" piece starts here
+                board[1][BOARD_SIZE-1]=new Cell(1);   //The "1" piece starts here
+
+                fillUpXmlBoard();
+                Logger.info("The board was successfully initialized");
+                try{
+                        JAXBHelper.toXML(XmlBoard,new FileOutputStream("StartingBoard.xml"));
+                        Logger.info("Starting position saved into StartingBoard.xml");
+                } catch(Exception e){
+                        Logger.debug(e,"Writing to XML didn't work!");
+                }
+        }
+
+        public void fillUpXmlBoard() {
+                for (Cell c : XmlBoard.getBoard()){
+                    XmlBoard.getBoard().remove(c);
+                }
+                for (int row=0;row<2;row++){
+                        for (int column=0; column<BOARD_SIZE; column++){
+                                XmlBoard.getBoard().add(board[row][column]);
+                        }
+                }
         }
 
         /**
@@ -44,8 +69,9 @@ public class PuzzleGameModel {
                 boolean endState=true;
 
                 for (int i=0; i<BOARD_SIZE-1;i++){
-                        if (!(board[1][i].get().getValue()==(i+1))) {
+                        if (!(board[1][i].getValue()==(i+1))) {
                                 endState=false;
+                                break;
                         }
                 }
 
@@ -64,10 +90,10 @@ public class PuzzleGameModel {
          * @throws IllegalMoveException if the move doesn't follow the game rules
          */
         public void move(int thisRow, int thisColumn, int thatRow, int thatColumn) throws IllegalMoveException{
-                if (isLegal(thisRow,thisColumn,thatRow,thatColumn) && board[thatRow][thatColumn].get().getValue()==0 &&
-                board[thisRow][thisColumn].get().getValue()>0){
-                        board[thatRow][thatColumn].get().setValue(board[thisRow][thisColumn].get().getValue());
-                        board[thisRow][thisColumn].get().setValue(0);
+                if (isLegal(thisRow,thisColumn,thatRow,thatColumn) && board[thatRow][thatColumn].getValue()==0 &&
+                board[thisRow][thisColumn].getValue()>0){
+                        board[thatRow][thatColumn].setValue(board[thisRow][thisColumn].getValue());
+                        board[thisRow][thisColumn].setValue(0);
                 }
                 else {
                         throw new IllegalMoveException("You can't move from "+thisRow+" "+thisColumn+" to " +thatRow+" "+thatColumn);
@@ -86,7 +112,7 @@ public class PuzzleGameModel {
                 return  (i==0 || i==1) && (m==0 || m==1) &&
                         (j>=0 && j<BOARD_SIZE) && (n>=0 && n<BOARD_SIZE) &&
                         ((abs(i-m)==1 && abs(j-n)==0) || (abs(i-m)==0 && abs(j-n)==1)) &&
-                        board[m][n].get().getState()==CellState.VALID;
+                        board[m][n].getState()==CellState.VALID;
         }
 
         /**
@@ -99,10 +125,10 @@ public class PuzzleGameModel {
 
                 for (int row=0; row<2; row++){
                         for (int column=0; column<BOARD_SIZE;column++){
-                                if (board[row][column].get().getState()==CellState.INVALID)
+                                if (board[row][column].getState()==CellState.INVALID)
                                         builder.append("X ");
                                 else
-                                        builder.append(board[row][column].get().getValue()+" ");
+                                        builder.append(board[row][column].getValue()+" ");
                         }
                         builder.append("\n");
                 }
@@ -111,7 +137,7 @@ public class PuzzleGameModel {
 
         /** @return The {@link Cell} object on the {@link #board} specified by the coordinates*/
         public Cell getCell(int i, int j){
-                return board[i][j].get();
+                return board[i][j];
         }
 
 }

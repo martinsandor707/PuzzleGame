@@ -36,7 +36,7 @@ public class PuzzleGameController {
             for (int column=0; column<board.getColumnCount(); column++){
                 StackPane cell;
                 if (model.getCell(row,column).getState()== CellState.INVALID){
-                    cell=new StackPane(); //We just draw an invisible cell to fill up the GridPane
+                    cell=new StackPane();
                 }
                 else{
                     cell=drawValidCell(row,column);
@@ -77,8 +77,8 @@ public class PuzzleGameController {
         if (selectedCell!=null){
             try{
                 StackPane destinationCell=(StackPane)event.getSource();
-                int destinationRow= board.getRowIndex(destinationCell);
-                int destinationColumn=board.getColumnIndex(destinationCell);
+                int destinationRow= GridPane.getRowIndex(destinationCell);
+                int destinationColumn= GridPane.getColumnIndex(destinationCell);
 
                 model.move(selectedRow,selectedColumn,destinationRow,destinationColumn);
                 Logger.debug("The player did a legal move. The current state of the board should be:\n" +model+"\n");
@@ -134,8 +134,8 @@ public class PuzzleGameController {
         selectedCell.getStyleClass().remove("cell");
         selectedCell.getStyleClass().add("selectedCell");
 
-        selectedRow= board.getRowIndex(selectedCell);
-        selectedColumn=board.getColumnIndex(selectedCell);
+        selectedRow= GridPane.getRowIndex(selectedCell);
+        selectedColumn= GridPane.getColumnIndex(selectedCell);
 
         highlightNeighbouringCells();
 
