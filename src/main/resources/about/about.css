@@ -1,0 +1,11 @@
+.root, .button, .label{
+    -fx-background-color: #ae560d;
+    -fx-font-size: 24;
+    -fx-font-family: Comic Sans;
+    -fx-text-fill: #6ea81c;
+    -fx-alignment: center;
+}
+.button{
+    -fx-border-style: solid;
+    -fx-border-color: #6ea81c;
+}

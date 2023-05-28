@@ -1,6 +1,18 @@
+.root, .button, #instruction{
+    -fx-background-color: #ae560d;
+    -fx-font-size: 24;
+    -fx-font-family: Comic Sans;
+    -fx-text-fill: #6ea81c;
+    -fx-alignment: center;
+}
+.button{
+    -fx-border-style: solid;
+    -fx-border-color: #6ea81c;
+}
+
 .cell{
     -fx-border-style: solid;
-    -fx-background-color: white;
+    -fx-background-color: #dfd0c0;
     -fx-font-size: 20;
     -fx-font-family: Comic Sans;
     -fx-text-fill: white;

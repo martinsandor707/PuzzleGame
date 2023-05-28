@@ -2,7 +2,9 @@ package puzzlegame;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,15 +15,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
-
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import puzzlegame.model.CellState;
 import puzzlegame.model.IllegalMoveException;
 import puzzlegame.model.PuzzleGameModel;
 
 import org.tinylog.Logger;
+
+import java.io.File;
+import java.io.IOException;
+
 public class PuzzleGameController {
 
     private final PuzzleGameModel model=new PuzzleGameModel();
@@ -40,7 +46,7 @@ public class PuzzleGameController {
 
     @FXML
     public void initialize(){
-        board=new GridPane();
+
         for (int row=0; row<board.getRowCount(); row++){
             for (int column=0; column<board.getColumnCount(); column++){
                 StackPane cell;
@@ -74,7 +80,6 @@ public class PuzzleGameController {
             cell.setOnMouseClicked(this::occupiedCellClicked);
         }
         else{
-
             cell.setOnMouseClicked(this::emptyCellClicked);
         }
 
@@ -102,6 +107,8 @@ public class PuzzleGameController {
 
                 if (model.isEndState()){
                     Logger.info("The player won, hooray!");
+                    File lastSave=new File("LastSave.xml");
+                    lastSave.delete();
                     showVictoryPopUp();
                 }
 
@@ -118,17 +125,23 @@ public class PuzzleGameController {
         victoryPopUp.initModality(Modality.APPLICATION_MODAL);
         victoryPopUp.setTitle("Hooray, you won!!");
 
-        Label victoryMessage= new Label("Thank you for trying out my little puzzle game!\n " +
-                "I had to create this project in 4 days instead of working on it for 2 weeks or so like I was supposed to, much to my annoyance\n"+
-                "Despite this, I think it turned out pretty well, I hope my teachers will think so too.");
+        Label victoryMessage= new Label("You won, great job!\n " +
+                "Feel free to reset everything and poke around more, maybe you can find some bugs that escaped my attention :P\n"+
+                "Alternatively you can click the button on the right and get back to the main menu");
         victoryMessage.setAlignment(Pos.CENTER);
         victoryMessage.setTextAlignment(TextAlignment.CENTER);
 
         Button playAgain=new Button("Play again!");
-        playAgain.setOnAction(this::resetGame);
+        playAgain.setOnAction(e ->{
+            victoryPopUp.close();
+            resetGame(e);
+        });
 
         Button quit=new Button("Back to the main menu");
-        quit.setOnAction(this::backToMainMenu);
+        quit.setOnAction(e ->{
+            victoryPopUp.close();
+            backToMainMenu(e);
+        });
 
         VBox Vlayout= new VBox(10);
         HBox Hlayout= new HBox(10);
@@ -143,10 +156,6 @@ public class PuzzleGameController {
 
         Scene scene1= new Scene(Vlayout, 600, 450);
 
-        //TODO: Check if I actually need this
-//        victoryPopUp.setOnCloseRequest(e ->{
-//            e.consume();
-//        });
         victoryPopUp.setScene(scene1);
         victoryPopUp.show();
     }
@@ -247,9 +256,34 @@ public class PuzzleGameController {
 
     public void resetGame(ActionEvent actionEvent) {
         model.loadFromXml("StartingBoard.xml");
-        initialize();
+        board.getChildren().remove(0,20);
+        selectedCell=null;
+        for (int row=0; row<board.getRowCount(); row++) {
+            for (int column = 0; column < board.getColumnCount(); column++) {
+                StackPane cell;
+                if (model.getCell(row, column).getState() == CellState.INVALID) {
+                    cell = new StackPane();
+                } else {
+                    cell = drawValidCell(row, column);
+                }
+                cell.setPrefSize(120, 120);
+                board.add(cell, column, row);
+                gridPaneArray[row][column] = cell;
+            }
+        }
     }
 
     public void backToMainMenu(ActionEvent actionEvent) {
+        try{
+            Stage stage=(Stage) board.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/mainmenu/mainMenu.fxml"));
+            stage.setTitle("Main menu");
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch(IOException e){
+            Logger.debug("mainMenu.fxml doesn't exist!");
+        }
     }
 }

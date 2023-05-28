@@ -1,5 +1,3 @@
-package puzzlegame;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,8 +10,8 @@ public class PuzzleGameApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/puzzlegame/game.fxml"));
-        stage.setTitle("JavaFX Board Game Example");
+        Parent root = FXMLLoader.load(getClass().getResource("/mainmenu/mainMenu.fxml"));
+        stage.setTitle("Main Menu");
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);

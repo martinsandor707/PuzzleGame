@@ -41,9 +41,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="puzzlegame.PuzzleGameController">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@game.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="puzzlegame.PuzzleGameController">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" stylesheets="@/puzzlegame/game.css" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
             <GridPane fx:id="board" layoutX="100.0" layoutY="82.0" prefHeight="210.0" prefWidth="1000.0">
               <columnConstraints>
@@ -63,7 +63,7 @@
                 <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
-            <Label contentDisplay="CENTER" layoutX="3.0" layoutY="347.0" prefHeight="25.0" prefWidth="1200.0" text="Put the pieces in ascending order!" textAlignment="CENTER">
+            <Label fx:id="instruction" contentDisplay="CENTER" layoutX="3.0" layoutY="347.0" prefHeight="25.0" prefWidth="1200.0" text="Put the pieces in ascending order!" textAlignment="CENTER">
                <font>
                   <Font name="Times New Roman" size="22.0" />
                </font>
