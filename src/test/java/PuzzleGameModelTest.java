@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import puzzlegame.model.IllegalMoveException;
-import puzzlegame.model.PuzzleGameModel;
+import model.IllegalMoveException;
+import model.PuzzleGameModel;
 
-import static puzzlegame.model.PuzzleGameModel.BOARD_SIZE;
+import static model.PuzzleGameModel.BOARD_SIZE;
 
 public class PuzzleGameModelTest {
 
@@ -13,6 +13,7 @@ public class PuzzleGameModelTest {
     @BeforeEach
     public void setup(){
         model=new PuzzleGameModel();
+        model.loadFromXml("src/main/resources/StartingBoard.xml");
         System.out.println("----- The winning state is below -----\n"+model);
     }
 

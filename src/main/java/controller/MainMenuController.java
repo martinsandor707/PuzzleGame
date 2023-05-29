@@ -1,4 +1,4 @@
-package mainmenu;
+package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,11 +11,19 @@ import org.tinylog.Logger;
 
 import java.io.IOException;
 
+/**
+ * The controller of the main menu.
+ */
 public class MainMenuController {
 
     @FXML
-    AnchorPane anchorPane;
+    private AnchorPane anchorPane;
 
+    /**
+     * Changing the scene to the game after button press.
+     *
+     * @param actionEvent the event invoking the method
+     */
     public void changeToPuzzleGame(ActionEvent actionEvent) {
         try{
             Stage stage=(Stage) anchorPane.getScene().getWindow();
@@ -30,6 +38,11 @@ public class MainMenuController {
         }
     }
 
+    /**
+     * Changing the scene to the "about" page after button press.
+     *
+     * @param actionEvent the event invoking the method
+     */
     public void changeToAbout(ActionEvent actionEvent) {
         try{
             Stage stage=(Stage) anchorPane.getScene().getWindow();
@@ -45,6 +58,10 @@ public class MainMenuController {
 
     }
 
+    /**
+     * Exits the application.
+     * @param actionEvent the event invoking the method
+     */
     public void quit(ActionEvent actionEvent) {
         Stage stage=(Stage) anchorPane.getScene().getWindow();
         stage.close();

@@ -17,7 +17,7 @@ For now, my only objective is to complete this project and get the best grade po
 In the future I might add additional functions, such as generating levels of any sizes, or creating multiple language support.
 
 Functions the finished program will need to have:
-1. [ ] A simple UI using JavaFX
-2. [ ] Business logic so the game works
-3. [ ] The implementation should follow the MVC architecture
-4. [ ] Data storage in JSON or XML files, or a database (program should have I/O for these)
+1. [x] A simple UI using JavaFX
+2. [x] Business logic so the game works
+3. [x] The implementation should follow the MVC architecture
+4. [x] Data storage in JSON or XML files, or a database (program should have I/O for these)

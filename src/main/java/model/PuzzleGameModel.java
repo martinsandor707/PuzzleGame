@@ -1,4 +1,4 @@
-package puzzlegame.model;
+package model;
 
 import jaxb.JAXBHelper;
 import org.tinylog.Logger;
@@ -16,10 +16,11 @@ import static java.lang.Math.abs;
  */
 public class PuzzleGameModel {
 
+        /**The number of columns the board should have. */
         public static final int BOARD_SIZE=10;
         private final Cell[][] board = new Cell[2][BOARD_SIZE];
 
-        /**I only need this for ease of XML conversion */
+        /**I only need this for ease of XML conversion. */
         private BoardWrapper XmlBoard=new BoardWrapper();
 
         /**
@@ -27,15 +28,19 @@ public class PuzzleGameModel {
          * It currently sets up the board according to the last save, or if none is found, then the Star
          */
         public PuzzleGameModel() {
-                File lastSave=new File("LastSave.xml");
+                File lastSave=new File("src/main/resources/LastSave.xml");
                 if (lastSave.exists()){
                         loadFromXml(lastSave.getPath());
                 }else{
-                        loadFromXml("StartingBoard.xml");
+                        loadFromXml("src/main/resources/StartingBoard.xml");
                 }
                 Logger.info("The board was successfully initialized");
         }
 
+        /**
+         * Converts the current state of the board into XML format and saves it under the name of {@code filePath.xml}.
+         * @param filePath The name of the file you want to create
+         */
         public void saveToXml(String filePath) {
                 XmlBoard.setBoard(new ArrayList<Cell>());
                 Logger.debug("XmlBoard cleared");
@@ -53,6 +58,11 @@ public class PuzzleGameModel {
                 }
         }
 
+        /**
+         * Looks for a file named {@code filePath.xml}, and if found, it will extract the data
+         * and fill up the current board according to it.
+         * @param filePath The name of the file you want to read.
+         */
         public void loadFromXml(String filePath){
                 try {
                         XmlBoard=JAXBHelper.fromXML(BoardWrapper.class,new FileInputStream(filePath));
@@ -134,7 +144,7 @@ public class PuzzleGameModel {
 
         /**
          * @return A String representation of the current board state, where invalid states are denoted by X, empty cells
-         * are 0 and occupied cells are their respective value
+         * are 0 and occupied cells are their respective value.
          */
         @Override
         public String toString(){
@@ -152,7 +162,12 @@ public class PuzzleGameModel {
                 return builder.toString();
         }
 
-        /** @return The {@link Cell} object on the {@link #board} specified by the coordinates*/
+        /**
+         * Gets a cell from the board.
+         * @param i the row #
+         * @param j the column #
+         * @return The {@link Cell} object on the {@link #board} specified by the coordinates
+         */
         public Cell getCell(int i, int j){
                 return board[i][j];
         }

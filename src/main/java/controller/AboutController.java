@@ -1,4 +1,4 @@
-package about;
+package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,11 +12,17 @@ import org.tinylog.Logger;
 
 import java.io.IOException;
 
+/**
+ * The controller of the "about" page. Very basic.
+ */
 public class AboutController {
 
     @FXML
-    Label label;
+    private Label label;
 
+    /**
+     * A simple initialization method used to set the contents of the label.
+     */
     @FXML
     public void initialize(){
         label.setText("Thank you for trying out my little puzzle game!\n " +
@@ -25,6 +31,11 @@ public class AboutController {
         label.setAlignment(Pos.CENTER);
     }
 
+    /**
+     * Changing the scene back to the main menu after button press.
+     *
+     * @param actionEvent the event invoking the method
+     */
     public void changeToMain(ActionEvent actionEvent) {
         try{
             Stage stage=(Stage) label.getScene().getWindow();
@@ -35,7 +46,7 @@ public class AboutController {
             stage.setResizable(false);
             stage.show();
         } catch(IOException e){
-            Logger.debug("about.fxml doesn't exist!");
+            Logger.debug("main.fxml doesn't exist!");
         }
     }
 }

@@ -1,4 +1,4 @@
-package puzzlegame;
+package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,15 +19,18 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import puzzlegame.model.CellState;
-import puzzlegame.model.IllegalMoveException;
-import puzzlegame.model.PuzzleGameModel;
+import model.CellState;
+import model.IllegalMoveException;
+import model.PuzzleGameModel;
 
 import org.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The controller of the main game. This contains any and all visualizations of the state of the {@link #model}.
+ */
 public class PuzzleGameController {
 
     private final PuzzleGameModel model=new PuzzleGameModel();
@@ -36,7 +39,7 @@ public class PuzzleGameController {
     @FXML
     private GridPane board;
 
-    /** I hate having to use this, but accessing any values on the GridPane is extremely bothersome*/
+    /** I hate having to use this, but accessing any values on the GridPane is extremely bothersome.*/
     private final StackPane[][] gridPaneArray=new StackPane[2][10];
 
     /**
@@ -86,6 +89,13 @@ public class PuzzleGameController {
         return cell;
     }
 
+    /**
+     * The method handling whatever should happen when the user clicks an empty cell.<br>
+     * If there is no previously selected cell, nothing happens. Otherwise, it will move the selected cell to the new position.
+     * After doing this, the {@link #model} is checked to see if the player has won.
+     * @param event The trigger of the event.
+     */
+
     @FXML
     public void emptyCellClicked(MouseEvent event){
         if (selectedCell!=null){
@@ -107,7 +117,7 @@ public class PuzzleGameController {
 
                 if (model.isEndState()){
                     Logger.info("The player won, hooray!");
-                    File lastSave=new File("LastSave.xml");
+                    File lastSave=new File("src/main/resources/LastSave.xml");
                     lastSave.delete();
                     showVictoryPopUp();
                 }
@@ -120,6 +130,11 @@ public class PuzzleGameController {
 
     }
 
+    /**
+     * Method creating a popup window informing the player that they won.<br>
+     * It's pretty minimalistic and kind of ugly, but I didn't have the time or patience to create a new fxml file and
+     * hook it up with a css.
+     */
     private void showVictoryPopUp() {
         final Stage victoryPopUp = new Stage();
         victoryPopUp.initModality(Modality.APPLICATION_MODAL);
@@ -179,7 +194,13 @@ public class PuzzleGameController {
         cell.setOnMouseClicked(this::occupiedCellClicked);
     }
 
-
+    /**
+     * Method handling a mouseclick on an occupied cell.<br>
+     * This method does two things:<br>
+     * First it sets the {@link #selectedCell} to the given cell (and changes the selected row/column variables accordingly).<br>
+     * Then it invokes a method to highlight all the neighbours of the selected cell
+     * @param event the mouseclick
+     */
     @FXML
     public void occupiedCellClicked(MouseEvent event){
         if (selectedCell!=null){    //Reset the opacity of the previously selected cell
@@ -250,12 +271,20 @@ public class PuzzleGameController {
         }
     }
 
+    /**
+     * Saves the current state of the board in a file called {@code LastSave.xml}.
+     * @param actionEvent The event invoking the function
+     */
     public void saveCurrentState(ActionEvent actionEvent) {
-        model.saveToXml("LastSave.xml");
+        model.saveToXml("src/main/resources/LastSave.xml");
     }
 
+    /**
+     * Resets the game, much like a second initialization.
+     * @param actionEvent The event invoking the function
+     */
     public void resetGame(ActionEvent actionEvent) {
-        model.loadFromXml("StartingBoard.xml");
+        model.loadFromXml("src/main/resources/StartingBoard.xml");
         board.getChildren().remove(0,20);
         selectedCell=null;
         for (int row=0; row<board.getRowCount(); row++) {
@@ -273,11 +302,16 @@ public class PuzzleGameController {
         }
     }
 
+    /**
+     * Changing the scene back to the main menu after button press.
+     *
+     * @param actionEvent the event invoking the method
+     */
     public void backToMainMenu(ActionEvent actionEvent) {
         try{
             Stage stage=(Stage) board.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/mainmenu/mainMenu.fxml"));
-            stage.setTitle("Main menu");
+            stage.setTitle("main.Main menu");
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setResizable(false);

@@ -36,6 +36,7 @@ public class JAXBHelper {
     /**
      * Deserializes an object from XML.
      *
+     * @param <T> The object we want to read
      * @param clazz the class of the object
      * @param is the {@code InputStream} to read from
      * @return the resulting object
