@@ -36,9 +36,27 @@ public class PuzzleGameModelTest {
     }
 
     @Test
+    public void isLegalShouldBeFalse(){
+        Assertions.assertFalse(model.isLegal(0,0,9,9),"Test failed! isLegal doesn't work correctly!");
+    }
+    @Test
+    public void isLegalShouldBeTrue(){
+        Assertions.assertTrue(model.isLegal(1,1,1,0), "Test failed! isLegal doesn't work correctly!");
+    }
+
+    @Test
     public void moveShouldThrowIllegalMoveException(){
         Assertions.assertThrows(IllegalMoveException.class,() -> model.move(0,0,3,3),
                 "Test Failed! Move didn't follow the rules!");
+    }
+
+    @Test
+    public void getCellShouldgetCorrectCell(){
+        Assertions.assertAll(
+                "Checking some given cells",
+                () -> Assertions.assertEquals(4,model.getCell(1,3).getValue(),"Test failed! Cells are not the same!"),
+                () -> Assertions.assertEquals(0,model.getCell(0,3).getValue(),"Test failed! Cells are not the same!")
+        );
     }
 
     @Test
