@@ -4,6 +4,10 @@
 
     Ez az egyetlen magyar komment a projectben, minden más angolul lesz.
 -->
+## INFO
+As of 2023. 05. 29. the project was submitted to my teacher, one could consider that version 1.0.
+I don't know if I will get back to this project in the future, but completing what should have been weeks of work in 4 days was a hell of a ride. Things surely could have been optimized better, but I even surprised myself with how good it turned out despite the tight deadline.
+
 # Homework project F/2.17
 
 ![A picture of the game](/src/main/resources/other/game.png)
