@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<board>
+    <cell state="INVALID">0</cell>
+    <cell state="INVALID">0</cell>
+    <cell state="INVALID">0</cell>
+    <cell state="VALID">0</cell>
+    <cell state="INVALID">0</cell>
+    <cell state="VALID">0</cell>
+    <cell state="INVALID">0</cell>
+    <cell state="VALID">0</cell>
+    <cell state="INVALID">0</cell>
+    <cell state="INVALID">0</cell>
+    <cell state="VALID">0</cell>
+    <cell state="VALID">2</cell>
+    <cell state="VALID">3</cell>
+    <cell state="VALID">4</cell>
+    <cell state="VALID">5</cell>
+    <cell state="VALID">6</cell>
+    <cell state="VALID">7</cell>
+    <cell state="VALID">8</cell>
+    <cell state="VALID">9</cell>
+    <cell state="VALID">1</cell>
+</board>
